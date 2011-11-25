@@ -1,0 +1,70 @@
+<html>
+<head><title>No Favicons Extension Options</title></head>
+<style type="text/css"> 
+body {
+    background-color:#fff;
+    color:#000;
+    font-family:Verdana, Arial, sans-serif;
+    font-size:small;
+    font-weight:400;
+    line-height:150%;
+}
+</style> 
+<script type="text/javascript">
+    function save_options() 
+    {
+      var select = document.getElementById("icon-type");
+      var selection = select.children[select.selectedIndex].value;
+      localStorage["icon-type"] = selection;
+    
+      var status = document.getElementById("status");
+      status.innerHTML = "Options Saved.";
+    }
+    
+    function restore_options() 
+    {
+      var iconType = localStorage["icon-type"];
+      
+      if (!iconType) 
+        return;
+
+      var select = document.getElementById("icon-type");
+      
+      for (var i = 0; i < select.children.length; i++) 
+      {
+        var child = select.children[i];
+        
+        if (child.value == iconType) 
+        {
+          child.selected = "true";
+          break;
+        }
+      }
+    }
+</script>
+
+<body onload="restore_options()">
+<div id="selection">
+    Icon Type to replace favicons with in tabs and bookmarks:
+    <select id="icon-type">
+     <option value="page">Page Icon</option>
+     <option value="none">No Icon</option>
+     <option value="default">Browser Default</option>
+    </select>
+</div>
+
+<div id="options">
+Options:
+<ul>
+    <li>Page Icon - A clean white icon: <img src="icon-16.png"/></li>
+    <li>No Icon - Nothing is displayed in the favicon area.</li>
+    <li>Browser Default - Page icon for tabs, globe for bookmarks.  May change with new
+    versions of the browser.</li>
+</ul>
+</div>
+
+<br>
+<button onclick="save_options()">Save</button>
+<div id="status"></div>
+</body>
+</html>

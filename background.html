@@ -1,0 +1,12 @@
+<script>
+chrome.extension.onRequest.addListener(function(request, sender, sendResponse)
+{
+    switch (request.name)
+    {
+        case "getPreferences":
+            var iconType = localStorage["icon-type"];
+            sendResponse({ prefEnableKey : (!iconType ? "page" : iconType) });
+        break;
+     }
+});
+</script>
