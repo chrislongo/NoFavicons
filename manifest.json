@@ -5,10 +5,11 @@
     "icons": { "16": "icon-16.png", "48": "icon-48.png", "128": "icon-128.png" },
     "background_page" : "background.html",
     "options_page": "options.html",
+    
     "content_scripts": [
     {
-        "matches": ["<all_urls>"],
+        "matches": ["http://*/*", "https://*/*"],
         "js": ["nofavicons.js"],
-        "run_at" : "document_end"
+        "run_at" : "document_start"
     }]
 }

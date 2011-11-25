@@ -31,27 +31,30 @@ function replaceIcons(iconType)
     var head = document.getElementsByTagName("head")[0]; 
     var links = head.getElementsByTagName("link");   
     var found = false;
-    
+    var link;
+
+    // search document for favicon links and replace the image with ours
     for(var i = 0; i < links.length; i++) 
     {   
-        var link = links[i];
+        link = links[i];
         var rel = link.getAttribute("rel");   
          
         if(rel == "shortcut icon" || rel == "icon") 
         {   
-            link.type = "image/png";
             link.href = icons[iconType];
+            link.type = "image/png";
             found = true;
         }  
     }  
         
+    // if none are found, create a link to our image for consistency
     if(!found)
     {
-        var link = document.createElement("link");
+        link = document.createElement("link");
         
+        link.href = icons[iconType];
         link.type = "image/png";
         link.rel = "shortcut icon";
-        link.href = icons[iconType];
         
         head.insertBefore(link, head.childNodes[0]);
     }
