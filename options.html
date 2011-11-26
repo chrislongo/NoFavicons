@@ -9,13 +9,29 @@ body {
     font-weight:400;
     line-height:150%;
 }
+h1 {
+    font-size:small;
+    font-weight:bold;
+}
+#status {
+    margin: 5 0 10 0;
+ }
 </style> 
 <script type="text/javascript">
     function save_options() 
     {
-      var select = document.getElementById("icon-type");
-      var selection = select.children[select.selectedIndex].value;
-      localStorage["icon-type"] = selection;
+      var select = document.getElementById("selection");
+
+      for(var i = 0; i < select.children.length; i++) 
+      {
+        var child = select.children[i];
+        
+        if(child.checked) 
+        {
+          localStorage["icon-type"] = child.value;
+          break;
+        }
+      }       
     
       var status = document.getElementById("status");
       status.innerHTML = "Options Saved.";
@@ -24,19 +40,19 @@ body {
     function restore_options() 
     {
       var iconType = localStorage["icon-type"];
-      
-      if (!iconType) 
+            
+      if(!iconType) 
         return;
 
-      var select = document.getElementById("icon-type");
+      var select = document.getElementById("selection");
       
-      for (var i = 0; i < select.children.length; i++) 
+      for(var i = 0; i < select.children.length; i++) 
       {
         var child = select.children[i];
         
-        if (child.value == iconType) 
+        if(child.value == iconType) 
         {
-          child.selected = "true";
+          child.checked = true;
           break;
         }
       }
@@ -44,27 +60,18 @@ body {
 </script>
 
 <body onload="restore_options()">
+
 <div id="selection">
-    Icon Type to replace favicons with in tabs and bookmarks:
-    <select id="icon-type">
-     <option value="page">Page Icon</option>
-     <option value="none">No Icon</option>
-     <option value="default">Browser Default</option>
-    </select>
+  <h1>Icon type to replace favicons with in tabs and bookmarks</h1>
+  <input type="radio" name="icon-type" value="dashed"> Simple dashed outline: <img src="dashed.png"/><br />
+  <input type="radio" name="icon-type" value="page"> A clean white icon: <img src="icon-16.png"/><br />
+  <input type="radio" name="icon-type" value="default"> Browser Default - Page icon for tabs, globe for bookmarks.  May change with new versions of the browser.<br />
+  <input type="radio" name="icon-type" value="none"> Nothing. Caveat: Tab text may look a bit misaligned.
 </div>
 
-<div id="options">
-Options:
-<ul>
-    <li>Page Icon - A clean white icon: <img src="icon-16.png"/></li>
-    <li>No Icon - Nothing is displayed in the favicon area.</li>
-    <li>Browser Default - Page icon for tabs, globe for bookmarks.  May change with new
-    versions of the browser.</li>
-</ul>
-</div>
+<div id="status">&nbsp;</div>
 
-<br>
 <button onclick="save_options()">Save</button>
-<div id="status"></div>
+
 </body>
 </html>

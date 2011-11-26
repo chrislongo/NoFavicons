@@ -8,7 +8,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse)
             var value = localStorage["icon-type"];
 
             if(!value)
-                value = "page";
+                value = "dashed";
 
             sendResponse({ iconType : value });
         }
