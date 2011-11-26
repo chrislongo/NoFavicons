@@ -8,6 +8,7 @@
     
     "content_scripts": [
     {
+        "all_frames" : true,
         "matches": ["http://*/*", "https://*/*"],
         "js": ["nofavicons.js"],
         "run_at" : "document_start"

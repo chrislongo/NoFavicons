@@ -12,11 +12,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-  
+
 chrome.extension.sendRequest({name: "getPreferences"}, function(response)
 {
-    var iconType = response.prefEnableKey;
-    replaceIcons(iconType);
+    replaceIcons(response.iconType);
 });
 
 function replaceIcons(iconType)

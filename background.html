@@ -1,11 +1,17 @@
 <script>
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse)
 {
-    switch (request.name)
+    switch(request.name)
     {
         case "getPreferences":
-            var iconType = localStorage["icon-type"];
-            sendResponse({ prefEnableKey : (!iconType ? "page" : iconType) });
+        {
+            var value = localStorage["icon-type"];
+
+            if(!value)
+                value = "page";
+
+            sendResponse({ iconType : value });
+        }
         break;
      }
 });
