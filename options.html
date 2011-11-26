@@ -12,7 +12,7 @@
         font-family:Verdana, Arial, sans-serif;
         font-size:small;
         line-height:175%;
-        margin:20px;
+        margin:10px;
     }
 
     h1 {
@@ -25,7 +25,7 @@
     }
 
     #selection {
-        margin-left:20px;
+        margin-left:15px;
     }
 
     #status {
@@ -34,26 +34,12 @@
     }
     </style> 
     <script type="text/javascript">
-    function save_options() 
+    function save(value) 
     {
-        var select = document.getElementById("selection");
-
-        for(var i = 0; i < select.children.length; i++) 
-        {
-            var child = select.children[i];
-
-            if(child.checked) 
-            {
-                 localStorage["icon-type"] = child.value;
-                 break;
-            }
-        }       
-
-        var status = document.getElementById("status");
-        status.innerHTML = "Options Saved.";
+        localStorage["icon-type"] = value;
     }
 
-    function restore_options() 
+    function load() 
     {
         var iconType = localStorage["icon-type"];
         
@@ -76,18 +62,14 @@
     </script>
 </head>
 
-<body onload="restore_options()">
+<body onload="load()">
     <h1>Icon type to replace favicons with in tabs and bookmarks</h1>
 
     <div id="selection">
-      <input type="radio" name="icon-type" value="dashed"> Simple dashed outline: <img src="image/dashed.png" alt=""/><br />
-      <input type="radio" name="icon-type" value="page"> A clean white icon: <img src="image/page.png" alt="" /><br />
-      <input type="radio" name="icon-type" value="default"> Browser Default: <img src="image/default.png" alt="" /><br />
-      <input type="radio" name="icon-type" value="none"> Nothing. Caveat: Tab text may look a bit misaligned.
+      <input type="radio" name="icon" value="dashed" onclick="save(this.value)"> Simple dashed outline: <img src="image/dashed.png" alt=""/><br />
+      <input type="radio" name="icon" value="page" onclick="save(this.value)"> A clean white icon: <img src="image/page.png" alt="" /><br />
+      <input type="radio" name="icon" value="default" onclick="save(this.value)"> Chrome Default: <img src="image/default.png" alt="" /><br />
+      <input type="radio" name="icon" value="none" onclick="save(this.value)"> Nothing (tab text may look a bit misaligned).
     </div>
-
-    <div id="status">&nbsp;</div>
-
-    <button onclick="save_options()">Save Options</button>
 </body>
 </html>
