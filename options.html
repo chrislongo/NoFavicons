@@ -18,45 +18,45 @@ h1 {
  }
 </style> 
 <script type="text/javascript">
-    function save_options() 
-    {
-      var select = document.getElementById("selection");
+function save_options() 
+{
+    var select = document.getElementById("selection");
 
-      for(var i = 0; i < select.children.length; i++) 
-      {
+    for(var i = 0; i < select.children.length; i++) 
+    {
         var child = select.children[i];
-        
+
         if(child.checked) 
         {
-          localStorage["icon-type"] = child.value;
-          break;
+             localStorage["icon-type"] = child.value;
+             break;
         }
-      }       
+    }       
+
+    var status = document.getElementById("status");
+    status.innerHTML = "Options Saved.";
+}
+
+function restore_options() 
+{
+    var iconType = localStorage["icon-type"];
     
-      var status = document.getElementById("status");
-      status.innerHTML = "Options Saved.";
-    }
-    
-    function restore_options() 
-    {
-      var iconType = localStorage["icon-type"];
-            
-      if(!iconType) 
+    if(!iconType) 
         return;
 
-      var select = document.getElementById("selection");
-      
-      for(var i = 0; i < select.children.length; i++) 
-      {
+    var select = document.getElementById("selection");
+
+    for(var i = 0; i < select.children.length; i++) 
+    {
         var child = select.children[i];
-        
+
         if(child.value == iconType) 
         {
-          child.checked = true;
-          break;
+            child.checked = true;
+            break;
         }
-      }
     }
+}
 </script>
 
 <body onload="restore_options()">
