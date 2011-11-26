@@ -13,27 +13,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-chrome.extension.sendRequest({name: "getPreferences"}, function(response)
+if (document.documentElement instanceof HTMLElement)
 {
-    replaceIcons(response.iconType);
-});
-
-function replaceIcons(iconType)
-{
-    var icons = 
+    chrome.extension.sendRequest({name: "getPreferences"}, function(response)
     {
-        "dashed" : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAArklEQVR42t2TMQ4CIRBF9xBGEw5AkBJKY7uhcHsCjfEkHkJDLOWiyDeTyWoFwcriMcD8/wMkTKWUId6DMUYrpa5Symddb1CB9/4IaM09aOHhgLpxyzlf6jxChErsibjuQQsPB1C6hKARCQ8HcHof8eMEvQHwDAX89grOuVNvADx/9AbjJ7DWPkIIh1YztPBwQErprLW+t34maOFZv8G2MlcWIcSESuyI5as3k2d6AZGetvsfEgPvAAAAAElFTkSuQmCC",
-        "page" : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAD9QTFRF////AAAAAAAAAAAAAAAAc3Z4iIqNiIuOlpiaq6yu4ePk7e7v8PHy8/T09fb29vf3+fn6+vr6+/v8/f3+////XEvC3AAAAAV0Uk5TAAQTZm7KxAyxAAAAXElEQVQYV3XNSRKAIAxE0YgQRUCm3P+sRpBUieVb/kU3wJfGZpOA1FgpSM4zSyjBB2ZpFKQQ2c7ME2JiBzOqh1TYPTxCqbU//YZHnkJ273C6Kdx60EasLcCiBMAFU/kIzx0NylkAAAAASUVORK5CYII=",
-        "none" : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAIUlEQVQ4EWP8//8/AyWAiRLNIL2jBoyGwWg6gOSigc8LAGOaAx0s99CyAAAAAElFTkSuQmCC",
-        "default" : "chrome://favicon"
-    };
-   
+        replaceIcons(response.icon);
+    });
+}
+
+function replaceIcons(icon)
+{
     var head = document.getElementsByTagName("head")[0]; 
     var links = head.getElementsByTagName("link");   
     var found = false;
     var link;
 
     // search document for favicon links and replace the image with ours
+    // or Chrome will use its default and we don't want that
     for(var i = 0; i < links.length; i++) 
     {   
         link = links[i];
@@ -41,18 +37,18 @@ function replaceIcons(iconType)
          
         if(rel == "shortcut icon" || rel == "icon") 
         {   
-            link.href = icons[iconType];
+            link.href = icon;
             link.type = "image/png";
             found = true;
         }  
     }  
         
-    // if none are found, create a link to our image for consistency
+    // if no icons are found, create a link to our image for consistency
     if(!found)
     {
         link = document.createElement("link");
         
-        link.href = icons[iconType];
+        link.href = icon;
         link.type = "image/png";
         link.rel = "shortcut icon";
         

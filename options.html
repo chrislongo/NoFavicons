@@ -1,77 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+    "http://www.w3.org/TR/html4/loose.dtd"> 
+
 <html>
-<head><title>No Favicons Extension Options</title></head>
-<style type="text/css"> 
-body {
-    background-color:#fff;
-    color:#000;
-    font-family:Verdana, Arial, sans-serif;
-    font-size:small;
-    font-weight:400;
-    line-height:150%;
-}
-h1 {
-    font-size:small;
-    font-weight:bold;
-}
-#status {
-    margin: 5 0 10 0;
- }
-</style> 
-<script type="text/javascript">
-function save_options() 
-{
-    var select = document.getElementById("selection");
-
-    for(var i = 0; i < select.children.length; i++) 
-    {
-        var child = select.children[i];
-
-        if(child.checked) 
-        {
-             localStorage["icon-type"] = child.value;
-             break;
-        }
-    }       
-
-    var status = document.getElementById("status");
-    status.innerHTML = "Options Saved.";
-}
-
-function restore_options() 
-{
-    var iconType = localStorage["icon-type"];
+    <head>
+    <title>No Favicons Extension Options</title>
     
-    if(!iconType) 
-        return;
+    <style type="text/css"> 
+    body {
+        background-color:#fff;
+        color:#000;
+        font-family:Verdana, Arial, sans-serif;
+        font-size:small;
+        line-height:175%;
+        margin:20px;
+    }
 
-    var select = document.getElementById("selection");
+    h1 {
+        font-size:small;
+        font-weight:700;
+    }
 
-    for(var i = 0; i < select.children.length; i++) 
+    img {
+        vertical-align:middle;
+    }
+
+    #selection {
+        margin-left:20px;
+    }
+
+    #status {
+        font-weight:700;
+        margin:5px 0;
+    }
+    </style> 
+    <script type="text/javascript">
+    function save_options() 
     {
-        var child = select.children[i];
+        var select = document.getElementById("selection");
 
-        if(child.value == iconType) 
+        for(var i = 0; i < select.children.length; i++) 
         {
-            child.checked = true;
-            break;
+            var child = select.children[i];
+
+            if(child.checked) 
+            {
+                 localStorage["icon-type"] = child.value;
+                 break;
+            }
+        }       
+
+        var status = document.getElementById("status");
+        status.innerHTML = "Options Saved.";
+    }
+
+    function restore_options() 
+    {
+        var iconType = localStorage["icon-type"];
+        
+        if(!iconType) 
+            iconType = "dashed";
+
+        var select = document.getElementById("selection");
+
+        for(var i = 0; i < select.children.length; i++) 
+        {
+            var child = select.children[i];
+
+            if(child.value == iconType) 
+            {
+                child.checked = true;
+                break;
+            }
         }
     }
-}
-</script>
+    </script>
+</head>
 
 <body onload="restore_options()">
+    <h1>Icon type to replace favicons with in tabs and bookmarks</h1>
 
-<div id="selection">
-  <h1>Icon type to replace favicons with in tabs and bookmarks</h1>
-  <input type="radio" name="icon-type" value="dashed"> Simple dashed outline: <img src="dashed.png"/><br />
-  <input type="radio" name="icon-type" value="page"> A clean white icon: <img src="icon-16.png"/><br />
-  <input type="radio" name="icon-type" value="default"> Browser Default - Page icon for tabs, globe for bookmarks.  May change with new versions of the browser.<br />
-  <input type="radio" name="icon-type" value="none"> Nothing. Caveat: Tab text may look a bit misaligned.
-</div>
+    <div id="selection">
+      <input type="radio" name="icon-type" value="dashed"> Simple dashed outline: <img src="image/dashed.png" alt=""/><br />
+      <input type="radio" name="icon-type" value="page"> A clean white icon: <img src="image/page.png" alt="" /><br />
+      <input type="radio" name="icon-type" value="default"> Browser Default: <img src="image/default.png" alt="" /><br />
+      <input type="radio" name="icon-type" value="none"> Nothing. Caveat: Tab text may look a bit misaligned.
+    </div>
 
-<div id="status">&nbsp;</div>
+    <div id="status">&nbsp;</div>
 
-<button onclick="save_options()">Save</button>
-
+    <button onclick="save_options()">Save Options</button>
 </body>
 </html>

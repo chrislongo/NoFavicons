@@ -1,4 +1,12 @@
 <script>
+var icons = 
+{
+    "dashed" : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAArklEQVR42t2TMQ4CIRBF9xBGEw5AkBJKY7uhcHsCjfEkHkJDLOWiyDeTyWoFwcriMcD8/wMkTKWUId6DMUYrpa5Symddb1CB9/4IaM09aOHhgLpxyzlf6jxChErsibjuQQsPB1C6hKARCQ8HcHof8eMEvQHwDAX89grOuVNvADx/9AbjJ7DWPkIIh1YztPBwQErprLW+t34maOFZv8G2MlcWIcSESuyI5as3k2d6AZGetvsfEgPvAAAAAElFTkSuQmCC",
+    "page" : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAD9QTFRF////AAAAAAAAAAAAAAAAc3Z4iIqNiIuOlpiaq6yu4ePk7e7v8PHy8/T09fb29vf3+fn6+vr6+/v8/f3+////XEvC3AAAAAV0Uk5TAAQTZm7KxAyxAAAAXElEQVQYV3XNSRKAIAxE0YgQRUCm3P+sRpBUieVb/kU3wJfGZpOA1FgpSM4zSyjBB2ZpFKQQ2c7ME2JiBzOqh1TYPTxCqbU//YZHnkJ273C6Kdx60EasLcCiBMAFU/kIzx0NylkAAAAASUVORK5CYII=",
+    "none" : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAIUlEQVQ4EWP8//8/AyWAiRLNIL2jBoyGwWg6gOSigc8LAGOaAx0s99CyAAAAAElFTkSuQmCC",
+    "default" : "chrome://favicon"
+};
+
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse)
 {
     switch(request.name)
@@ -8,9 +16,9 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse)
             var value = localStorage["icon-type"];
 
             if(!value)
-                value = "dashed";
+                value = icons["dashed"];
 
-            sendResponse({ iconType : value });
+            sendResponse({ icon : icons[value] });
 
             break;
         }
