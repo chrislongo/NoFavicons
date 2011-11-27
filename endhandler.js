@@ -27,6 +27,7 @@ function insertIcon(icon)
     var head = document.getElementsByTagName("head")[0]; 
     var link = document.createElement("link");
         
+    link.id = "_nfi_icon";
     link.href = icon;
     link.type = "image/png";
     link.rel = "shortcut icon";
