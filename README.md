@@ -1,7 +1,7 @@
 # Info
 
-Chrome does not have an option to block favicons (sites icons) like Firefox does.  It's also not possible to block requests for favicons from a Chrome extension.  
+Chrome does not have an option to block favicons (sites icons) like Firefox does.
 
 This extension does its best to rid the Chrome UI of the clutter of favicons.  It will replace the favicon of the site with a custom or transparent icon.  
 
-It would be much better to block the icon request outright and remove it completely from the UI but, unfortunately, it's currently not possible from an extension.
+This extension first disables any links for favicons as the document loads, then replaces the site's icon with a custom one or a transparent icon for no icon.
