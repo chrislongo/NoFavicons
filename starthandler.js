@@ -1,12 +1,6 @@
-var icon;
-
 if (document.documentElement instanceof HTMLElement)
 {
-    chrome.extension.sendRequest({name: "getPreferences"}, function(response)
-    {
-        icon = response.icon;
-        document.addEventListener("beforeload", beforeloadHandler, true);
-    });
+    document.addEventListener("beforeload", beforeloadHandler, true);
 }
 
 // remove all favicon links from page before load
