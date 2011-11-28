@@ -16,7 +16,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse)
             var value = localStorage["icon-type"];
 
             if(!value)
-                value = icons["dashed"];
+                value = "dashed";
 
             sendResponse({ icon : icons[value] });
 
