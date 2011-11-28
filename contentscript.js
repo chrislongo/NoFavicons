@@ -15,7 +15,24 @@
 
 if (document.documentElement instanceof HTMLElement)
 {
-    document.addEventListener("beforeload", beforeloadHandler, true);
+    chrome.extension.sendRequest({name: "getPreferences"}, function(response)
+    {
+        insertIcon(response.icon);
+        document.addEventListener("beforeload", beforeloadHandler, true);
+    });
+}
+
+// insert our replacement icon as the favicon for this site
+function insertIcon(icon)
+{
+    var head = document.getElementsByTagName("head")[0]; 
+    var link = document.createElement("link");
+        
+    link.href = icon;
+    link.type = "image/png";
+    link.rel = "shortcut icon";
+        
+    head.insertBefore(link, head.childNodes[0]);
 }
 
 // remove all favicon links from page before they load
@@ -25,10 +42,11 @@ function beforeloadHandler(e)
     {
         var rel = e.target.rel.toLowerCase();
         
-        // don't disable our own icon!
-        if(e.target.id != "_nfi_icon" && 
-           (rel == "shortcut icon" || rel == "icon"))  
+        if(rel == "shortcut icon" || rel == "icon") 
         {
+            e.target.href = "";
+            e.target.type = "";
+            e.target.rel = "";
             e.target.setAttribute("disabled", "");
         }
     }
