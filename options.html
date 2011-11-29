@@ -4,66 +4,122 @@
 <html>
     <head>
     <title>No Favicons Extension Options</title>
-    
+
     <style type="text/css"> 
         body{background-color:#fff;color:#000;font-family:Verdana, Arial, sans-serif;font-size:small;line-height:175%;margin:10px;}
         h1{font-size:small;font-weight:700;}
         img{vertical-align:middle;}
         #selection{margin-left:15px;}
+        #upload{position:relative;text-align:right;-moz-opacity:0;filter:alpha(opacity: 0);opacity:0;z-index:2;}
+        #uploadtext{position:absolute;top:0;left:155px;z-index:1;}
+        #userimagearea{width:16px;height:16px;visibility:hidden;}
+        #fileinputs{position:relative;}
     </style> 
+
     <script type="text/javascript">
-    function save(values) 
-    {
-        localStorage["icon-type"] = values.type;
-
-        if(values.image)
+        function save() 
         {
-            localStorage["custom-image"] = values.image;
+            updateStatus("");
+
+            var imageType = getSelectedImageType();
+            var userImage = getLoadedUserImage();
+
+            localStorage["preferences"] = 
+                JSON.stringify({ imagetype:imageType, userimage:userImage });
         }
-    }
 
-    function load() 
-    {
-        var iconType = localStorage["icon-type"];
-        var image = localStorage["custom-image"];
-        
-        if(!iconType) 
-            iconType = "dashed";
-
-        if(image)
-             document.getElementById("newimage").src = image; 
-
-        var select = document.getElementById("selection");
-
-        for(var i = 0; i < select.children.length; i++) 
+        function load() 
         {
-            var child = select.children[i];
+            var serialized = localStorage["preferences"];
 
-            if(child.value == iconType) 
+            if(!serialized)
+                return;
+
+            var prefs = JSON.parse(serialized);
+        
+            if(prefs)
             {
-                child.checked = true;
-                break;
+                var imageType = (prefs.imagetype) ? prefs.imagetype : "dashed";
+                
+                var buttons = document.getElementsByName("imagetype");
+
+                for(var i = 0; i < buttons.length; i++) 
+                {
+                    var child = buttons[i];
+
+                    if(child.value == imageType) 
+                    {
+                        child.checked = true;
+                        break;
+                    }
+                }
+
+                var imageArea = document.getElementById("userimagearea");
+
+                if(prefs.userimage)
+                {
+                    imageArea.src = prefs.userimage; 
+                    imageArea.style.visibility = "visible";
+                }
             }
         }
-    }
 
-    function loadImageFile()
-    {
-        var reader = new FileReader();
-        
-        reader.onloadend = function(e)
+        function getSelectedImageType()
         {
-            // TODO: validate
-            document.getElementById("newimage").src = e.target.result;
-            document.getElementById("status").innerHTML = ""; 
+            var buttons = document.getElementsByName("imagetype");
+            var imageType;
 
-            save({type:"custom", image:e.target.result});
-        };
+            for(var i = 0; i < buttons.length; i++) 
+            {
+                var child = buttons[i];
 
-        document.getElementById("customradio").checked = true;
-        var file = document.getElementById("upload").files[0];
-        reader.readAsDataURL(file);
-    }
+                if(child.checked) 
+                {
+                    imageType = child.value;
+                    break;
+                }
+            }            
+
+            return imageType;
+        }
+
+        function getLoadedUserImage()
+        {
+            return document.getElementById("userimagearea").src;    
+        }
+
+        function loadImageFile()
+        {
+            var reader = new FileReader();
+            var imageArea = document.getElementById("userimagearea");
+
+            updateStatus("");
+
+            reader.onloadend = function(e)
+            {
+                imageArea.src = e.target.result;
+                imageArea.style.visibility = "visible";
+
+                document.getElementById("userradio").checked = true;
+                save();
+            };
+
+            var file = document.getElementById("upload").files[0];
+
+            if(!/image\//.test(file.type))
+            {
+                updateStatus("Not an image")
+                load();
+                return;
+            }
+
+            reader.readAsDataURL(file);
+        }
+
+        function updateStatus(text)
+        {
+            document.getElementById("status").innerHTML = text;    
+        }
     </script>
 </head>
 
@@ -71,16 +127,19 @@
     <h1>Icon type to replace favicons with in tabs and bookmarks</h1>
 
     <div id="selection">
-        <input type="radio" id="dashedradio" name="icon" value="dashed" onclick="save({type:this.value})"> Simple dashed outline: 
+        <input type="radio" id="dashedradio" name="imagetype" value="dashed" onclick="save()" checked> Simple dashed outline: 
         <img src="image/dashed.png" alt=""/><br />
-        <input type="radio" id="pageradio" name="icon" value="page" onclick="save({type:this.value})"> A clean white icon: 
+        <input type="radio" id="pageradio" name="imagetype" value="page" onclick="save()"> A clean white icon: 
         <img src="image/page.png" alt="" /><br />
-        <input type="radio" id="defaultradio" name="icon" value="default" onclick="save({type:this.value})"> Chrome Default: 
+        <input type="radio" id="defaultradio" name="imagetype" value="default" onclick="save()"> Chrome Default: 
         <img src="image/default.png" alt="" /><br />
-        <input type="radio" id="noneradio" name="icon" value="none" onclick="save({type:this.value})"> Nothing (tab text may look a bit misaligned).<br />
-        <input type="radio" id="customradio" name="icon" value="custom" onclick=""> Your own image
-        <img id="newimage" src="" />
+        <input type="radio" id="noneradio" name="imagetype" value="none" onclick="save()"> Nothing (tab text may look a bit misaligned)<br />
+        <div id="fileinputs">
+        <input type="radio" id="userradio" name="imagetype" value="user" onclick="save()"> Your own image
+        <img id="userimagearea" />
         <input id="upload" type="file" onchange="loadImageFile();" />
+        <div id="uploadtext">(click here to upload)</div>
+        </div>
     </div>
 
     <div id="status">

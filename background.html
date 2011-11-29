@@ -1,5 +1,5 @@
 <script>
-var icons = 
+var images = 
 {
     "dashed" : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAArklEQVR42t2TMQ4CIRBF9xBGEw5AkBJKY7uhcHsCjfEkHkJDLOWiyDeTyWoFwcriMcD8/wMkTKWUId6DMUYrpa5Symddb1CB9/4IaM09aOHhgLpxyzlf6jxChErsibjuQQsPB1C6hKARCQ8HcHof8eMEvQHwDAX89grOuVNvADx/9AbjJ7DWPkIIh1YztPBwQErprLW+t34maOFZv8G2MlcWIcSESuyI5as3k2d6AZGetvsfEgPvAAAAAElFTkSuQmCC",
     "page" : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAD9QTFRF////AAAAAAAAAAAAAAAAc3Z4iIqNiIuOlpiaq6yu4ePk7e7v8PHy8/T09fb29vf3+fn6+vr6+/v8/f3+////XEvC3AAAAAV0Uk5TAAQTZm7KxAyxAAAAXElEQVQYV3XNSRKAIAxE0YgQRUCm3P+sRpBUieVb/kU3wJfGZpOA1FgpSM4zSyjBB2ZpFKQQ2c7ME2JiBzOqh1TYPTxCqbU//YZHnkJ273C6Kdx60EasLcCiBMAFU/kIzx0NylkAAAAASUVORK5CYII=",
@@ -13,12 +13,23 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse)
     {
         case "getPreferences":
         {
-            var value = localStorage["icon-type"];
+            var image = images["dashed"]; // default
 
-            if(!value)
-                value = "dashed";
+            var serialized = localStorage["preferences"];
 
-            sendResponse({ icon : icons[value] });
+            if(serialized)
+            {
+                var prefs = JSON.parse(serialized);
+
+                if(prefs.imagetype)
+                {
+                    image = (prefs.imagetype == "user") 
+                        ? prefs.userimage 
+                        : images[prefs.imagetype];
+                }
+            }
+            
+            sendResponse({ icon : image });
 
             break;
         }
