@@ -40,14 +40,10 @@ function beforeloadHandler(e)
 {
     if(e.target instanceof HTMLLinkElement && e.target.rel)
     {
-        var rel = e.target.rel.toLowerCase();
+        var link = e.target;
+        var rel = link.rel.toLowerCase();
         
         if(rel == "shortcut icon" || rel == "icon") 
-        {
-            e.target.href = "";
-            e.target.type = "";
-            e.target.rel = "";
-            e.target.setAttribute("disabled", "");
-        }
+            link.parentNode.removeChild(link);
     }
 }
