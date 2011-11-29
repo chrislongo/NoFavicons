@@ -12,17 +12,26 @@
         #selection{margin-left:15px;}
     </style> 
     <script type="text/javascript">
-    function save(value) 
+    function save(values) 
     {
-        localStorage["icon-type"] = value;
+        localStorage["icon-type"] = values.type;
+
+        if(values.image)
+        {
+            localStorage["custom-image"] = values.image;
+        }
     }
 
     function load() 
     {
         var iconType = localStorage["icon-type"];
+        var image = localStorage["custom-image"];
         
         if(!iconType) 
             iconType = "dashed";
+
+        if(image)
+             document.getElementById("newimage").src = image; 
 
         var select = document.getElementById("selection");
 
@@ -37,6 +46,24 @@
             }
         }
     }
+
+    function loadImageFile()
+    {
+        var reader = new FileReader();
+        
+        reader.onloadend = function(e)
+        {
+            // TODO: validate
+            document.getElementById("newimage").src = e.target.result;
+            document.getElementById("status").innerHTML = ""; 
+
+            save({type:"custom", image:e.target.result});
+        };
+
+        document.getElementById("customradio").checked = true;
+        var file = document.getElementById("upload").files[0];
+        reader.readAsDataURL(file);
+    }
     </script>
 </head>
 
@@ -44,10 +71,19 @@
     <h1>Icon type to replace favicons with in tabs and bookmarks</h1>
 
     <div id="selection">
-      <input type="radio" name="icon" value="dashed" onclick="save(this.value)"> Simple dashed outline: <img src="image/dashed.png" alt=""/><br />
-      <input type="radio" name="icon" value="page" onclick="save(this.value)"> A clean white icon: <img src="image/page.png" alt="" /><br />
-      <input type="radio" name="icon" value="default" onclick="save(this.value)"> Chrome Default: <img src="image/default.png" alt="" /><br />
-      <input type="radio" name="icon" value="none" onclick="save(this.value)"> Nothing (tab text may look a bit misaligned).
+        <input type="radio" id="dashedradio" name="icon" value="dashed" onclick="save({type:this.value})"> Simple dashed outline: 
+        <img src="image/dashed.png" alt=""/><br />
+        <input type="radio" id="pageradio" name="icon" value="page" onclick="save({type:this.value})"> A clean white icon: 
+        <img src="image/page.png" alt="" /><br />
+        <input type="radio" id="defaultradio" name="icon" value="default" onclick="save({type:this.value})"> Chrome Default: 
+        <img src="image/default.png" alt="" /><br />
+        <input type="radio" id="noneradio" name="icon" value="none" onclick="save({type:this.value})"> Nothing (tab text may look a bit misaligned).<br />
+        <input type="radio" id="customradio" name="icon" value="custom" onclick=""> Your own image
+        <img id="newimage" src="" />
+        <input id="upload" type="file" onchange="loadImageFile();" />
+    </div>
+
+    <div id="status">
     </div>
 </body>
 </html>
