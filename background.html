@@ -11,21 +11,21 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse)
 {
     switch(request.name)
     {
-        case "getPreferences":
+        case "getOptions":
         {
             var image = images["dashed"]; // default
 
-            var serialized = localStorage["preferences"];
+            var stringified = localStorage["options"];
 
-            if(serialized)
+            if(stringified)
             {
-                var prefs = JSON.parse(serialized);
+                var options = JSON.parse(stringified);
 
-                if(prefs.imagetype)
+                if(options.imagetype)
                 {
-                    image = (prefs.imagetype == "user") 
-                        ? prefs.userimage 
-                        : images[prefs.imagetype];
+                    image = (options.imagetype == "user") 
+                        ? options.userimage 
+                        : images[options.imagetype];
                 }
             }
             

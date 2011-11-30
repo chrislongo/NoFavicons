@@ -1,6 +1,6 @@
 {
     "name": "No Favicons",
-    "version": "1.5.2",
+    "version": "1.6.0",
     "description": "Disables favicons on Chrome tabs and bookmarks.",
     "icons": { "16": "icon-16.png", "48": "icon-48.png", "128": "icon-128.png" },
     "background_page" : "background.html",

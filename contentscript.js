@@ -15,7 +15,7 @@
 
 if (document.documentElement instanceof HTMLElement)
 {
-    chrome.extension.sendRequest({name: "getPreferences"}, function(response)
+    chrome.extension.sendRequest({name: "getOptions"}, function(response)
     {
         insertIcon(response.icon);
         document.addEventListener("beforeload", beforeloadHandler, true);

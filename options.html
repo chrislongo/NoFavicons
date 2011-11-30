@@ -3,20 +3,28 @@
 
 <html>
     <head>
-    <title>No Favicons Extension Options</title>
+    <title>No Favicons Options</title>
 
-    <style type="text/css"> 
+    <style type="text/css">
         body{background-color:#fff;color:#000;font-family:Verdana, Arial, sans-serif;font-size:small;line-height:175%;margin:10px;}
         h1{font-size:small;font-weight:700;}
         img{vertical-align:middle;}
         #selection{margin-left:15px;}
         #upload{position:relative;text-align:right;-moz-opacity:0;filter:alpha(opacity: 0);opacity:0;z-index:2;}
-        #uploadtext{position:absolute;top:0;left:155px;z-index:1;}
+        #uploadtext{position:absolute;top:0;left:162px;z-index:1;}
         #userimagearea{width:16px;height:16px;visibility:hidden;}
         #fileinputs{position:relative;}
+        button {-webkit-border-radius:3px;-webkit-box-shadow:0 1px 3px rgba(0, 0, 0, 0.1)-webkit-user-select:none; background:-webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5); border:1px solid #AAA; color:#444; font-size:inherit; margin-bottom:0; min-width:4em; padding:3px 12px;}
     </style> 
 
     <script type="text/javascript">
+        // Options are an object:
+        //
+        // {
+        //     imagetype : "<type>",
+        //     userimage : "<base64 image>"
+        // }
+        //
         function save() 
         {
             updateStatus("");
@@ -24,22 +32,24 @@
             var imageType = getSelectedImageType();
             var userImage = getLoadedUserImage();
 
-            localStorage["preferences"] = 
+            localStorage["options"] = 
                 JSON.stringify({ imagetype:imageType, userimage:userImage });
         }
 
         function load() 
         {
-            var serialized = localStorage["preferences"];
+            var stringified = localStorage["options"];
 
-            if(!serialized)
+            if(!stringified)
                 return;
 
-            var prefs = JSON.parse(serialized);
+            var options = JSON.parse(stringified);
         
-            if(prefs)
+            if(options)
             {
-                var imageType = (prefs.imagetype) ? prefs.imagetype : "dashed";
+                var imageType = (options.imagetype) 
+                    ? options.imagetype 
+                    : "dashed";
                 
                 var buttons = document.getElementsByName("imagetype");
 
@@ -56,9 +66,9 @@
 
                 var imageArea = document.getElementById("userimagearea");
 
-                if(prefs.userimage)
+                if(options.userimage)
                 {
-                    imageArea.src = prefs.userimage; 
+                    imageArea.src = options.userimage; 
                     imageArea.style.visibility = "visible";
                 }
             }
@@ -106,6 +116,8 @@
 
             var file = document.getElementById("upload").files[0];
 
+            // probably should specify types in expression (png|jpeg|ico...)
+            // but there's many, many permutations of ico, etc.
             if(!/image\//.test(file.type))
             {
                 updateStatus("Not an image")
@@ -135,13 +147,12 @@
         <img src="image/default.png" alt="" /><br />
         <input type="radio" id="noneradio" name="imagetype" value="none" onclick="save()"> Nothing (tab text may look a bit misaligned)<br />
         <div id="fileinputs">
-        <input type="radio" id="userradio" name="imagetype" value="user" onclick="save()"> Your own image
+        <input type="radio" id="userradio" name="imagetype" value="user" onclick="save()"> Your own image:
         <img id="userimagearea" />
         <input id="upload" type="file" onchange="loadImageFile();" />
-        <div id="uploadtext">(click here to upload)</div>
+        <div id="uploadtext"><button>Upload</button></div>
         </div>
     </div>
-
     <div id="status">
     </div>
 </body>
