@@ -60,32 +60,32 @@
 
             var options = JSON.parse(stringified);
         
-            if(options)
+            // default
+            var imageType = (options.imagetype) 
+                ? options.imagetype 
+                : "dashed";
+            
+            // check the user's choice in image
+            var buttons = document.getElementsByName("imagetype");
+
+            for(var i = 0; i < buttons.length; i++) 
             {
-                var imageType = (options.imagetype) 
-                    ? options.imagetype 
-                    : "dashed";
-                
-                var buttons = document.getElementsByName("imagetype");
+                var child = buttons[i];
 
-                for(var i = 0; i < buttons.length; i++) 
+                if(child.value == imageType) 
                 {
-                    var child = buttons[i];
-
-                    if(child.value == imageType) 
-                    {
-                        child.checked = true;
-                        break;
-                    }
+                    child.checked = true;
+                    break;
                 }
+            }
 
-                var imageArea = document.getElementById("userimagearea");
+            // load user's image area 
+            var imageArea = document.getElementById("userimagearea");
 
-                if(options.userimage)
-                {
-                    imageArea.src = options.userimage; 
-                    imageArea.style.visibility = "visible";
-                }
+            if(options.userimage)
+            {
+                imageArea.src = options.userimage; 
+                imageArea.style.visibility = "visible";
             }
         }
 
@@ -120,6 +120,7 @@
 
             updateStatus("");
 
+            // read and display image
             reader.onloadend = function(e)
             {
                 imageArea.src = e.target.result;
