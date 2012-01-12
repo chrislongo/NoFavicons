@@ -13,19 +13,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-if (document.documentElement instanceof HTMLElement)
+
+chrome.extension.sendRequest({name: "getOptions"}, function(response)
 {
-    chrome.extension.sendRequest({name: "getOptions"}, function(response)
-    {
-        insertIcon(response.icon);
-        document.addEventListener("beforeload", beforeloadHandler, true);
-    });
-}
+    insertIcon(response.icon);
+    document.addEventListener("beforeload", beforeloadHandler, true);
+});
 
 // insert our replacement icon as the favicon for this site
 function insertIcon(icon)
 {
-    var head = document.getElementsByTagName("head")[0]; 
+    var head = document.getElementsByTagName("head")[0];
     var link = document.createElement("link");
         
     link.href = icon;
@@ -43,7 +41,7 @@ function beforeloadHandler(e)
         var link = e.target;
         var rel = link.rel.toLowerCase();
         
-        if(rel == "shortcut icon" || rel == "icon") 
+        if(rel == "shortcut icon" || rel == "icon")
             link.parentNode.removeChild(link);
     }
 }
